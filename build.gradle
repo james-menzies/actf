@@ -1,0 +1,39 @@
+plugins {
+
+    id'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
+
+
+group = 'org.menzies'
+version = '0.0.1'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+
+repositories {
+    mavenCentral()
+}
+compileJava {
+    doFirst {
+        options.compilerArgs = [
+                '--module-path', classpath.asPath,
+                '--add-modules', 'javafx.controls'
+
+        ]
+        classpath = files()
+    }
+}
+
+javafx {
+    version = '13'
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing']
+}
+
+mainClassName = 'autocompletetextfield.Main'
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.apache.commons:commons-csv:1.8'
+}
