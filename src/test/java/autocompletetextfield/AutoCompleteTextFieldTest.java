@@ -19,7 +19,7 @@ import utils.SamplePersonData;
 
 import java.io.IOException;
 
-public class AutoCompleteTextFieldViewTest  {
+public class AutoCompleteTextFieldTest {
 
 
     @FXML
@@ -52,7 +52,7 @@ public class AutoCompleteTextFieldViewTest  {
                 new ISearchPredicate<Person>() {
                     @Override
                     public boolean test(String userInput, String option) {
-                        return SmartStringSearch.test(userInput, option);
+                        return CamelCaseMatch.test(userInput, option);
                     }
                 };
 
@@ -61,7 +61,7 @@ public class AutoCompleteTextFieldViewTest  {
                 list, predicate
         );
 
-        input = new AutoCompleteTextFieldView(viewModel);
+        input = new AutoCompleteTextField(viewModel);
 
     }
 

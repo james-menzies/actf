@@ -8,11 +8,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class SamplePersonData {
 
 
-    private static List<Person> data;
+    private static List<Person> data = new ArrayList<>();
 
     public static List<Person> get() {
 
@@ -25,14 +26,10 @@ public class SamplePersonData {
 
     private static void initializeData() {
 
-
-        data = new ArrayList<>();
-
-
-        URL aussies = SamplePersonData.class.getResource("/details.csv");
+        URL source = SamplePersonData.class.getResource("/details.csv");
 
         try {
-            FileReader reader = new FileReader(aussies.getFile());
+            FileReader reader = new FileReader(source.getFile());
 
             CSVParser parser = CSVParser.parse(reader, CSVFormat.DEFAULT);
             Iterator<CSVRecord> iterator = parser.iterator();
@@ -41,7 +38,7 @@ public class SamplePersonData {
 
             iterator.next();
 
-            iterator.forEachRemaining( (record) ->
+            iterator.forEachRemaining((record) ->
             {
                 data.add(new Person(record.get(0), record.get(1)));
             });
@@ -50,11 +47,7 @@ public class SamplePersonData {
 
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getGlobal().warning("Sample data failed to initialize. Empty list returned.");
         }
-
-
     }
-
-
 }

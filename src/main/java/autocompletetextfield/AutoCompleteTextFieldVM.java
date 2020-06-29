@@ -9,38 +9,37 @@ import javafx.collections.ObservableList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class AutoCompleteTextFieldVM<T> implements  IAutoCompleteTextField<T> {
+public class AutoCompleteTextFieldVM<T> {
 
     private final StringProperty userInput;
     private final ObjectProperty<T> selectedObject;
     private final Map<String, T> stringToObject;
     private final ListBinding<String> suggestions;
     private final StringProperty selectedSuggestion;
+    private final BiPredicate<String, String> matchingAlgorithm;
+    private final Function<T, String> objectConversion;
 
-    @Override
-    public StringProperty userInputProperty() {
+    StringProperty userInputProperty() {
         return userInput;
     }
 
-    @Override
-    public ObservableList<String> suggestionsProperty() {
+    ObservableList<String> suggestionsProperty() {
         return suggestions;
     }
 
-    @Override
-    public StringProperty selectedSuggestionProperty() {
+    StringProperty selectedSuggestionProperty() {
         return selectedSuggestion;
     }
 
-    @Override
-    public ObjectProperty<T> getSelectedObject() {
+    ObjectProperty<T> selectedObjectProperty() {
         return selectedObject;
     }
 
-    @Override
-    public void handleUserSelect() {
+    void handleUserSelect() {
 
         String currentSelection =
                 selectedSuggestionProperty().get();
@@ -50,26 +49,24 @@ public class AutoCompleteTextFieldVM<T> implements  IAutoCompleteTextField<T> {
         }
     }
 
-    public AutoCompleteTextFieldVM
-            (ObjectProperty<T> selectedObject,
-            ObservableList<T> validChoices,
-            ISearchPredicate<T> searchPredicate) {
+    AutoCompleteTextFieldVM(ObservableList<T> validChoices) {
 
-        this.selectedObject = selectedObject;
+        this.selectedObject = new SimpleObjectProperty<>();
         userInput = new SimpleStringProperty("");
+
+        matchingAlgorithm = CamelCaseMatch::test;
+        objectConversion = Object::toString;
+
+        stringToObject = getStringToObject(validChoices);
         initializeSelectedObject();
         selectedSuggestion = new SimpleStringProperty("");
-        stringToObject =
-                getStringToObject(validChoices, searchPredicate);
-        var validChoicesAsString = getValidChoicesAsString();
-        suggestions = getSuggestions(searchPredicate, validChoicesAsString);
+        suggestions = getSuggestions();
     }
 
-    private Map<String, T> getStringToObject(ObservableList<T> validChoices,
-                                             ISearchPredicate<T> searchPredicate) {
+    private Map<String, T> getStringToObject(ObservableList<T> validChoices) {
         return validChoices.stream()
                 .collect(Collectors.toMap
-                        (searchPredicate::convertToString, t -> t,
+                        (objectConversion, t -> t,
                                 (t, t2) -> t));
 
     }
@@ -85,8 +82,7 @@ public class AutoCompleteTextFieldVM<T> implements  IAutoCompleteTextField<T> {
         }, userInput));
     }
 
-    private ListBinding<String> getSuggestions(ISearchPredicate<T> searchPredicate,
-                                               List<String> validChoicesAsString) {
+    private ListBinding<String> getSuggestions() {
         return new ListBinding<>() {
 
             {
@@ -96,17 +92,16 @@ public class AutoCompleteTextFieldVM<T> implements  IAutoCompleteTextField<T> {
             @Override
             protected ObservableList<String> computeValue() {
 
-                return getNewStrings(validChoicesAsString, searchPredicate);
+                return getNewStrings();
             }
         };
     }
 
-    private ObservableList<String> getNewStrings(List<String> validChoicesAsString,
-                                                 ISearchPredicate<T> searchPredicate) {
+    private ObservableList<String> getNewStrings() {
         return FXCollections.observableList(
-                validChoicesAsString
+                getValidChoicesAsString()
                         .stream()
-                        .filter((s -> searchPredicate.test(userInput.get(), s)))
+                        .filter((s -> matchingAlgorithm.test(userInput.get(), s)))
                         .collect(Collectors.toList())
         );
     }

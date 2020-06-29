@@ -9,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import utils.Person;
 
-import java.util.List;
-
 import static org.junit.Assert.*;
 
 public class AutoCompleteTextFieldVMTest {
@@ -80,24 +78,13 @@ public class AutoCompleteTextFieldVMTest {
     public void chosenObjectVariableBehavesCorrectly() {
 
         assertNull("Object should be null to begin with.",
-                viewModel.getSelectedObject().get());
+                viewModel.selectedObjectProperty().get());
 
         viewModel.userInputProperty().set(searchPredicate.convertToString(p1));
-        assertEquals(samplePersonList.get(0), viewModel.getSelectedObject().get());
+        assertEquals(samplePersonList.get(0), viewModel.selectedObjectProperty().get());
 
         viewModel.userInputProperty().set("random nonsensical garbage");
         assertNull("Object reverts to null when string stops matching.",
-                viewModel.getSelectedObject().get());
-    }
-
-    private <T> void  printList(String purpose, List<T> list) {
-
-        System.out.printf("%n%s%n", purpose);
-
-        for (T ob: list) {
-            System.out.println(ob.toString());
-        }
-
-        System.out.println();
+                viewModel.selectedObjectProperty().get());
     }
 }

@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class SmartStringSearch {
+public class CamelCaseMatch {
 
     private final String input;
     private final String object;
@@ -13,7 +13,7 @@ public class SmartStringSearch {
     private boolean stringParsed = false;
     Pattern nonWordChars;
 
-    private SmartStringSearch(String input, String object) {
+    private CamelCaseMatch(String input, String object) {
         this.input = input.toLowerCase();
         this.object = object;
         options = new ArrayDeque<>();
@@ -24,7 +24,7 @@ public class SmartStringSearch {
 
         if (input.equals("")) return true;
 
-        return new SmartStringSearch(input, object).matches();
+        return new CamelCaseMatch(input, object).matches();
     }
 
     private boolean matches() {

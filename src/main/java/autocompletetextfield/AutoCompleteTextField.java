@@ -2,6 +2,7 @@ package autocompletetextfield;
 
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
+import javafx.beans.property.ObjectProperty;
 import javafx.event.Event;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
@@ -11,9 +12,14 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Popup;
 
 
-public class AutoCompleteTextFieldView extends TextField {
+public class AutoCompleteTextField<T> extends TextField {
 
-    public AutoCompleteTextFieldView(IAutoCompleteTextField<?> viewModel) {
+    private ObjectProperty<T> selectedObject;
+    private AutoCompleteTextFieldVM<T> viewModel;
+
+    public AutoCompleteTextField() {
+
+        viewModel = new AutoCompleteTextFieldVM<>();
 
         ListView<String> listView = new ListView<>();
         listView.minWidthProperty().bind(widthProperty());
@@ -48,4 +54,9 @@ public class AutoCompleteTextFieldView extends TextField {
             }
         });
     }
+
+    private ObjectProperty<T> getSelectedObject() {
+        return viewModel.getSelectedObject();
+    }
+
 }
