@@ -19,7 +19,6 @@ public class AutoCompleteTextField<T> extends TextField {
 
     public AutoCompleteTextField() {
 
-        viewModel = new AutoCompleteTextFieldVM<>();
 
         ListView<String> listView = new ListView<>();
         listView.minWidthProperty().bind(widthProperty());
@@ -56,7 +55,7 @@ public class AutoCompleteTextField<T> extends TextField {
     }
 
     private ObjectProperty<T> getSelectedObject() {
-        return viewModel.getSelectedObject();
+        return null;
     }
 
 }

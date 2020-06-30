@@ -1,29 +1,25 @@
 package autocompletetextfield;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import utils.Person;
 
+import java.util.function.BiPredicate;
 import static org.junit.Assert.*;
 
 public class AutoCompleteTextFieldVMTest {
 
     private AutoCompleteTextFieldVM<Person> viewModel;
     private ObservableList<Person> samplePersonList;
-    private ObjectProperty<Person> selectedValue;
-    private ISearchPredicate<Person> searchPredicate;
+    private BiPredicate<String, String> matchingAlgorithm;
 
-    private Person p1 = new Person("James", "Menzies");
-    private Person p2 = new Person("Emma", "Menzies");
-    private Person p3 = new Person("Hayato", "Simpson");
-    private Person p4 = new Person("Doug", "Stanhope");
-    private Person p5 = new Person("Billy", "Smith");
-
+    private final Person p1 = new Person("James", "Menzies");
+    private final Person p2 = new Person("Emma", "Menzies");
+    private final Person p3 = new Person("Hayato", "Simpson");
+    private final Person p4 = new Person("Doug", "Stanhope");
+    private final Person p5 = new Person("Billy", "Smith");
 
     @Before
     public void before() {
@@ -32,59 +28,24 @@ public class AutoCompleteTextFieldVMTest {
                p1, p2, p3, p4, p5
         );
 
-        selectedValue = new SimpleObjectProperty<>();
-
-        searchPredicate = new ISearchPredicate<Person>() {
-
-            @Override
-            public boolean test(String userInput, String option) {
-                return option.toLowerCase().contains(userInput.toLowerCase());
-            }
-        };
+        matchingAlgorithm = (s1, s2) ->
+                s2.toLowerCase().contains(s1.toLowerCase());
 
         viewModel = new AutoCompleteTextFieldVM<>
-                (selectedValue, samplePersonList, searchPredicate);
+                (samplePersonList, matchingAlgorithm, Object::toString);
     }
 
-    @Test
-    public void personToStringBehavesAsExpected() {
-
-        Assert.assertEquals("MENZIES, James", samplePersonList.get(0).toString());
-    }
 
     @Test
     public void validChoicesPopulateCorrectly() {
 
-        ObservableList<String> suggestions =
-                viewModel.suggestionsProperty();
-
-        Assert.assertEquals("Suggestions initially contain all options",
-                samplePersonList.size(), suggestions.size());
-
-        viewModel.userInputProperty().set("me");
-        Assert.assertEquals("size of list after typing 'me'",
-                2, suggestions.size());
-        assertTrue("Contains James Menzies",
-                suggestions.contains(p1.toString()));
-        assertTrue("Contains Emma Menzies",
-                suggestions.contains(p2.toString()));
-
-        viewModel.userInputProperty().set("");
-        Assert.assertEquals("On resetting input, list populates back to max size",
-                samplePersonList.size(), suggestions.size());
+        assertTrue(matchingAlgorithm.test("Menzies", p1.toString()));
+        assertFalse(matchingAlgorithm.test("JamesMeng", p1.toString()));
     }
 
     @Test
     public void chosenObjectVariableBehavesCorrectly() {
 
-        assertNull("Object should be null to begin with.",
-                viewModel.selectedObjectProperty().get());
 
-        viewModel.userInputProperty().set(searchPredicate.convertToString(p1));
-        assertEquals(samplePersonList.get(0), viewModel.selectedObjectProperty().get());
-
-        viewModel.userInputProperty().set("random nonsensical garbage");
-        assertNull("Object reverts to null when string stops matching.",
-                viewModel.selectedObjectProperty().get());
     }
 }

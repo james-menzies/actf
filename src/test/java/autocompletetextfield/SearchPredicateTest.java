@@ -1,3 +1,4 @@
+/*
 package autocompletetextfield;
 
 import org.junit.Test;
@@ -34,4 +35,4 @@ public class SearchPredicateTest {
         System.out.println(SamplePersonData.get());
     }
 
-}
+}*/

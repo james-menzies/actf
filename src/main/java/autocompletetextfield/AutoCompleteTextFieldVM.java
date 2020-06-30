@@ -39,31 +39,29 @@ public class AutoCompleteTextFieldVM<T> {
         return selectedObject;
     }
 
-    void handleUserSelect() {
-
-        String currentSelection =
-                selectedSuggestionProperty().get();
-
-        if (currentSelection != null) {
-            userInputProperty().set(currentSelection);
-        }
-    }
 
     AutoCompleteTextFieldVM(ObservableList<T> validChoices) {
 
-        this.selectedObject = new SimpleObjectProperty<>();
-        userInput = new SimpleStringProperty("");
-
-        matchingAlgorithm = CamelCaseMatch::test;
-        objectConversion = Object::toString;
-
-        stringToObject = getStringToObject(validChoices);
-        initializeSelectedObject();
-        selectedSuggestion = new SimpleStringProperty("");
-        suggestions = getSuggestions();
+        this(validChoices, CamelCaseMatch::test, Object::toString);
     }
 
-    private Map<String, T> getStringToObject(ObservableList<T> validChoices) {
+    AutoCompleteTextFieldVM(ObservableList<T> validChoices,
+                            BiPredicate<String, String> matchingAlgorithm,
+                            Function<T, String> objectConversion) {
+
+        userInput = new SimpleStringProperty("");
+
+        this.matchingAlgorithm = matchingAlgorithm;
+        this.objectConversion = objectConversion;
+
+        stringToObject = initStringToObject(validChoices);
+        selectedObject = initSelectedObject();
+        selectedSuggestion = new SimpleStringProperty("");
+        suggestions = getSuggestions();
+
+    }
+
+    private Map<String, T> initStringToObject(ObservableList<T> validChoices) {
         return validChoices.stream()
                 .collect(Collectors.toMap
                         (objectConversion, t -> t,
@@ -75,11 +73,14 @@ public class AutoCompleteTextFieldVM<T> {
         return new ArrayList<>(stringToObject.keySet());
     }
 
-    private void initializeSelectedObject() {
+    private ObjectProperty<T> initSelectedObject() {
 
-        selectedObject.bind(Bindings.createObjectBinding(() -> {
-            return stringToObject.getOrDefault(userInput.get(), null);
-        }, userInput));
+        ObjectProperty<T> selectedObject = new SimpleObjectProperty<>();
+
+        selectedObject.bind(Bindings.createObjectBinding(() ->
+                stringToObject.getOrDefault(userInput.get(), null), userInput));
+
+        return selectedObject;
     }
 
     private ListBinding<String> getSuggestions() {
@@ -104,5 +105,15 @@ public class AutoCompleteTextFieldVM<T> {
                         .filter((s -> matchingAlgorithm.test(userInput.get(), s)))
                         .collect(Collectors.toList())
         );
+    }
+
+    void handleUserSelect() {
+
+        String currentSelection =
+                selectedSuggestionProperty().get();
+
+        if (currentSelection != null) {
+            userInputProperty().set(currentSelection);
+        }
     }
 }
