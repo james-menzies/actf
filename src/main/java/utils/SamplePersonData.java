@@ -17,7 +17,7 @@ public class SamplePersonData {
 
     public static List<Person> get() {
 
-        if (Objects.isNull(data)) {
+        if (data.isEmpty()) {
             initializeData();
         }
 
@@ -26,7 +26,7 @@ public class SamplePersonData {
 
     private static void initializeData() {
 
-        URL source = SamplePersonData.class.getResource("/details.csv");
+        URL source = SamplePersonData.class.getResource("/utils/details.csv");
 
         try {
             FileReader reader = new FileReader(source.getFile());
@@ -40,7 +40,7 @@ public class SamplePersonData {
 
             iterator.forEachRemaining((record) ->
             {
-                data.add(new Person(record.get(0), record.get(1)));
+                data.add(new Person(record.get(0), record.get(1), record.get(2), record.get(3), record.get(4)));
             });
 
             Collections.sort(data);

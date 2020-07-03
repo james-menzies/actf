@@ -2,7 +2,10 @@ package autocompletetextfield;
 
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Label;
@@ -11,20 +14,33 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Popup;
 
+import java.util.function.BiPredicate;
+import java.util.function.Function;
+
 
 public class AutoCompleteTextField<T> extends TextField {
 
-    private ObjectProperty<T> selectedObject;
     private AutoCompleteTextFieldVM<T> viewModel;
 
-    public AutoCompleteTextField() {
+    public AutoCompleteTextField(ObservableList<T> validChoices) {
 
+        this(validChoices, CamelCaseMatch::test, Object::toString);
+    }
+
+    AutoCompleteTextField(ObservableList<T> validChoices,
+                          BiPredicate<String, String> matchingAlgorithm,
+                          Function<T, String> objectConversion) {
+
+        viewModel = new AutoCompleteTextFieldVM<>
+                (validChoices, matchingAlgorithm, objectConversion);
 
         ListView<String> listView = new ListView<>();
         listView.minWidthProperty().bind(widthProperty());
+
         listView.setItems(viewModel.suggestionsProperty());
         listView.setPlaceholder(new Label("No Matches"));
         listView.getSelectionModel().select(0);
+
 
         Popup popup = new Popup();
         popup.getContent().add(listView);
@@ -54,8 +70,11 @@ public class AutoCompleteTextField<T> extends TextField {
         });
     }
 
-    private ObjectProperty<T> getSelectedObject() {
-        return null;
+    public ObjectProperty<T> selectedObjectProperty() {
+        return viewModel.selectedObjectProperty();
     }
 
+    public T getSelectedObject() {
+        return viewModel.selectedObjectProperty().get();
+    }
 }

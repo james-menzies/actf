@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class AutoCompleteTextFieldVM<T> {
 
     private final StringProperty userInput;
-    private final ObjectProperty<T> selectedObject;
+    private final ReadOnlyObjectWrapper<T> selectedObject;
     private final Map<String, T> stringToObject;
     private final ListBinding<String> suggestions;
     private final StringProperty selectedSuggestion;
@@ -69,13 +69,9 @@ public class AutoCompleteTextFieldVM<T> {
 
     }
 
-    private List<String> getValidChoicesAsString() {
-        return new ArrayList<>(stringToObject.keySet());
-    }
+    private ReadOnlyObjectWrapper<T> initSelectedObject() {
 
-    private ObjectProperty<T> initSelectedObject() {
-
-        ObjectProperty<T> selectedObject = new SimpleObjectProperty<>();
+        ReadOnlyObjectWrapper<T> selectedObject = new ReadOnlyObjectWrapper<>();
 
         selectedObject.bind(Bindings.createObjectBinding(() ->
                 stringToObject.getOrDefault(userInput.get(), null), userInput));
@@ -105,6 +101,10 @@ public class AutoCompleteTextFieldVM<T> {
                         .filter((s -> matchingAlgorithm.test(userInput.get(), s)))
                         .collect(Collectors.toList())
         );
+    }
+
+    private List<String> getValidChoicesAsString() {
+        return new ArrayList<>(stringToObject.keySet());
     }
 
     void handleUserSelect() {
