@@ -31,13 +31,7 @@ public class AutoCompleteTextFieldVMTest {
                p1, p2, p3, p4, p5
         );
 
-        matchingAlgorithm = (s1, s2) -> {
-
-            if (s1.isEmpty()) {
-                return true;
-            }
-            else return s2.toLowerCase().contains(s1.toLowerCase());
-        };
+        matchingAlgorithm = MatchingAlgorithms.SUB_STRING_MATCH;
 
         viewModel = new AutoCompleteTextFieldVM<>
                 (samplePersonList, matchingAlgorithm, Object::toString);

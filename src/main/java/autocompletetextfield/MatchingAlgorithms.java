@@ -2,7 +2,7 @@ package autocompletetextfield;
 
 import java.util.function.BiPredicate;
 
-public class Presets {
+public class MatchingAlgorithms {
 
     public final static BiPredicate<String, String> CAMEL_MATCH =
             CamelCaseMatch::test;

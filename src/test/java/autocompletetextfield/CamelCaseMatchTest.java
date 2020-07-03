@@ -10,6 +10,11 @@ public class CamelCaseMatchTest {
     private String geoff = "O'Reilly, Geoff";
 
     @Test
+    public void emptyStringMatches() {
+        assertTrue(CamelCaseMatch.test("", yueHong));
+    }
+
+    @Test
     public void simpleOneLetterMatch(){
         assertTrue(CamelCaseMatch.test("c", yueHong));
     }
