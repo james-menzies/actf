@@ -13,6 +13,7 @@ public class CamelCaseMatch {
     private boolean stringParsed = false;
     Pattern nonWordChars;
 
+    // TODO: 6/7/20 cater for hyphens, apostrophes 
     private CamelCaseMatch(String input, String object) {
         this.input = input.toLowerCase();
         this.object = object;
@@ -150,6 +151,7 @@ public class CamelCaseMatch {
         Unfortunately, if I don't immediately destroy a single letter word,
         a horrid exception is thrown on creation of a new option.
          */
+        // TODO: 3/7/20 fix one letter word bug (again) 
         private Option getNewOptionReplaceCurrentWord(String newWord) {
 
             Optional<String> newCurrentWord = Optional.of(newWord);

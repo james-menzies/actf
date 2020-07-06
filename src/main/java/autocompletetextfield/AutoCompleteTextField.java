@@ -17,7 +17,7 @@ import javafx.stage.Popup;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
-
+// TODO: 3/7/20 Write documentation!
 public class AutoCompleteTextField<T> extends TextField {
 
     private AutoCompleteTextFieldVM<T> viewModel;
@@ -36,7 +36,7 @@ public class AutoCompleteTextField<T> extends TextField {
 
         ListView<String> listView = new ListView<>();
         listView.minWidthProperty().bind(widthProperty());
-
+        // TODO: 3/7/20 optimize pop up window size
         listView.setItems(viewModel.suggestionsProperty());
         listView.setPlaceholder(new Label("No Matches"));
         listView.getSelectionModel().select(0);
