@@ -13,7 +13,7 @@ public class CamelCaseMatch {
     private boolean stringParsed = false;
     Pattern nonWordChars;
 
-    // TODO: 6/7/20 cater for hyphens, apostrophes 
+    // TODO: 6/7/20 cater for hyphens, apostrophes
     private CamelCaseMatch(String input, String object) {
         this.input = input.toLowerCase();
         this.object = object;
@@ -102,12 +102,20 @@ public class CamelCaseMatch {
                         currentIndexOfCurrentWord == currentWord.get().length() - 1;
 
                 nextBranch.add(endOfCurrentWordReached?
-                        getNewOptionDestroyCurrentWord():
+                        getNewOptionDestroyCurrentWord(availableWords):
                         getNewOptionPreserveCurrentWord());
             }
 
             getNewWordMatches().stream()
-                    .forEach( word -> nextBranch.add(getNewOptionReplaceCurrentWord(word)));
+                    .forEach( word -> {
+                        if (word.length() > 1){
+                            nextBranch.add(getNewOptionReplaceCurrentWord(word));
+                        }
+                        else {
+                            List<String> newAvailableWords = getNewAvailableWords(availableWords, word);
+                            nextBranch.add(getNewOptionDestroyCurrentWord(newAvailableWords));
+                        }
+                    });
 
             return nextBranch;
         }
@@ -137,35 +145,36 @@ public class CamelCaseMatch {
                     newCurrentIndexOfCurrentWord, currentWord);
         }
 
-        private Option getNewOptionDestroyCurrentWord() {
+        private Option getNewOptionDestroyCurrentWord(List<String> newAvailableWords) {
 
             Optional<String> newCurrentWord = Optional.empty();
             int newCurrentIndexOfInput = currentIndexOfInput + 1;
             int newCurrentIndexOfCurrentWord = 0;
 
-            return new Option(newCurrentIndexOfInput, availableWords,
+            return new Option(newCurrentIndexOfInput, newAvailableWords,
                     newCurrentIndexOfCurrentWord, newCurrentWord);
         }
 
-        /*
-        Unfortunately, if I don't immediately destroy a single letter word,
-        a horrid exception is thrown on creation of a new option.
-         */
         // TODO: 3/7/20 fix one letter word bug (again) 
         private Option getNewOptionReplaceCurrentWord(String newWord) {
 
             Optional<String> newCurrentWord = Optional.of(newWord);
             int newCurrentIndexOfInput = currentIndexOfInput + 1;
             int newCurrentIndexOfCurrentWord = 1;
-            List<String> newAvailableWords =
-                    availableWords.stream()
-                    .filter(s -> !s.equals(newWord))
-                    .collect(Collectors.toList());
-
-            newAvailableWords = Collections.unmodifiableList(newAvailableWords);
+            List<String> newAvailableWords = getNewAvailableWords(availableWords, newWord);
 
             return new Option(newCurrentIndexOfInput, newAvailableWords,
                     newCurrentIndexOfCurrentWord, newCurrentWord);
+        }
+
+        //creates a new copy of the list without the specified word
+        private List<String> getNewAvailableWords(List<String> availableWords, String word) {
+            List<String> newAvailableWords =
+                    availableWords.stream()
+                            .filter(s -> !s.equals(word))
+                            .collect(Collectors.toList());
+
+            return Collections.unmodifiableList(newAvailableWords);
         }
 
         public boolean isLast() {
