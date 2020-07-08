@@ -7,7 +7,6 @@ public class MatchingAlgorithms {
     public final static BiPredicate<String, String> CAMEL_MATCH =
             CamelCaseMatch::test;
 
-    // TODO: 3/7/20 Write tests for substring match 
     public final static BiPredicate<String, String> SUB_STRING_MATCH =
             (s1, s2) -> {
 
@@ -16,7 +15,6 @@ public class MatchingAlgorithms {
                 } else return s2.toLowerCase().contains(s1.toLowerCase());
             };
 
-    // TODO: 3/7/20 Write tests for exact match 
     public final static BiPredicate<String, String> EXACT_MATCH =
             (s1, s2) -> s2.toLowerCase().indexOf(s1.toLowerCase()) == 0;
 
