@@ -18,6 +18,6 @@ public class MatchingAlgorithms {
 
     // TODO: 3/7/20 Write tests for exact match 
     public final static BiPredicate<String, String> EXACT_MATCH =
-            (s1, s2) -> s2.indexOf(s1) == 0;
+            (s1, s2) -> s2.toLowerCase().indexOf(s1.toLowerCase()) == 0;
 
 }

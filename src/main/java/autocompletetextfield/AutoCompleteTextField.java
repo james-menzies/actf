@@ -3,8 +3,7 @@ package autocompletetextfield;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.geometry.Bounds;
@@ -21,10 +20,14 @@ import java.util.function.Function;
 public class AutoCompleteTextField<T> extends TextField {
 
     private AutoCompleteTextFieldVM<T> viewModel;
+    private DoubleProperty rowHeight;
+    private IntegerProperty maxRows;
+    private static final BiPredicate<String, String> DEFAULT_MATCHING_ALGORITHM =
+            (s1, s2) -> CamelCaseMatch.test(s1, s2, '\'', '-');
 
     public AutoCompleteTextField(ObservableList<T> validChoices) {
 
-        this(validChoices, CamelCaseMatch::test, Object::toString);
+        this(validChoices, DEFAULT_MATCHING_ALGORITHM, Object::toString);
     }
 
     AutoCompleteTextField(ObservableList<T> validChoices,
@@ -36,10 +39,20 @@ public class AutoCompleteTextField<T> extends TextField {
 
         ListView<String> listView = new ListView<>();
         listView.minWidthProperty().bind(widthProperty());
-        // TODO: 3/7/20 optimize pop up window size
         listView.setItems(viewModel.suggestionsProperty());
         listView.setPlaceholder(new Label("No Matches"));
         listView.getSelectionModel().select(0);
+
+        rowHeight = new SimpleDoubleProperty();
+        rowHeight.addListener( (v, o, n) -> {
+            listView.setFixedCellSize((Double) n);
+        });
+        rowHeight.setValue(25.0);
+
+        maxRows = new SimpleIntegerProperty(8);
+
+        listView.prefHeightProperty().bind(
+                viewModel.createListHeightProperty(maxRows, rowHeight));
 
 
         Popup popup = new Popup();

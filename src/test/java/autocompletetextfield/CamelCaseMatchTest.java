@@ -8,6 +8,7 @@ public class CamelCaseMatchTest {
 
     private String yueHong = "Cha, Yue-Hong";
     private String geoff = "O'Reilly, Geoff";
+    private String james = "Menzies, James";
 
     @Test
     public void emptyStringMatches() {
@@ -16,7 +17,7 @@ public class CamelCaseMatchTest {
 
     @Test
     public void simpleOneLetterMatch(){
-        assertTrue(CamelCaseMatch.test("c", yueHong));
+        assertTrue(CamelCaseMatch.test("m", james));
     }
 
     @Test
@@ -61,11 +62,37 @@ public class CamelCaseMatchTest {
 
     @Test
     public void matchAcceptsHyphenatedWord() {
-        assertTrue(CamelCaseMatch.test("yue-hon", yueHong));
+        assertTrue(CamelCaseMatch.test("yue-hon", yueHong, '-'));
     }
 
     @Test
     public void matchAcceptsApostrophe() {
-        assertTrue(CamelCaseMatch.test("o're", geoff));
+        assertTrue(CamelCaseMatch.test("o're", geoff, '\''));
+    }
+
+    @Test
+    public void spaceCharBehavesCorrectly() {
+        assertTrue(CamelCaseMatch.test("cha y", yueHong));
+    }
+
+    @Test
+    public void spaceAsFirstCharAlwaysReturnsTrue() {
+        assertTrue(CamelCaseMatch.test(" ", yueHong));
+    }
+
+    @Test
+    public void lastCharAsSpaceDoesNotInvalidateValidity() {
+        assertTrue(CamelCaseMatch.test("y ", yueHong));
+    }
+
+    @Test
+    public void spaceCharBehavesCorrectlyWithIncompleteWord() {
+        assertTrue(CamelCaseMatch.test("ch y", yueHong));
+    }
+
+    @Test
+    public void altWordListDoesNotAcceptDuplicates() {
+        assertFalse(CamelCaseMatch.test("yue-hh", yueHong, '-'));
+        assertFalse(CamelCaseMatch.test("yy", yueHong, '-'));
     }
 }

@@ -1,8 +1,10 @@
 package autocompletetextfield;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ListBinding;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -13,7 +15,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class AutoCompleteTextFieldVM<T> {
+class AutoCompleteTextFieldVM<T> {
 
     private final StringProperty userInput;
     private final ReadOnlyObjectWrapper<T> selectedObject;
@@ -115,5 +117,19 @@ public class AutoCompleteTextFieldVM<T> {
         if (currentSelection != null) {
             userInputProperty().set(currentSelection);
         }
+    }
+
+    DoubleBinding createListHeightProperty(IntegerProperty maxRows, DoubleProperty cellHeight) {
+
+        return Bindings.createDoubleBinding(() -> {
+
+            if (suggestions.size() == 0) {
+                return 75.0;
+            } else if(suggestions.size() >= maxRows.getValue()) {
+                return maxRows.getValue() * cellHeight.getValue() + 2;
+            }
+            else return suggestions.size() * cellHeight.getValue() + 2;
+        }, maxRows, cellHeight, suggestions);
+
     }
 }

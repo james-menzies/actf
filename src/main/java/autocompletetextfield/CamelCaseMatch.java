@@ -11,26 +11,70 @@ public class CamelCaseMatch {
     private final String object;
     private Deque<Option> options;
     private boolean stringParsed = false;
-    Pattern nonWordChars;
+    private List<String> availableWords;
+    private static final Pattern DEFAULT_DELIMITER = Pattern.compile("[^\\w]+");
 
-    // TODO: 6/7/20 cater for hyphens, apostrophes
-    private CamelCaseMatch(String input, String object) {
+    private CamelCaseMatch(String input, String object, List<String> availableWords) {
         this.input = input.toLowerCase();
         this.object = object;
+        this.availableWords = availableWords;
         options = new ArrayDeque<>();
-        nonWordChars = Pattern.compile("[^\\w]+");
     }
 
-    public static boolean test(String input, String object) {
+    private static List<String> createAvailableWords(Pattern delimiter, String object) {
+
+        Stream<String> availableWords = Stream.of(delimiter.split(object));
+
+        return availableWords
+                .map(String::toLowerCase)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    private static Pattern createCustomDelimiter (char[] customWordChars) {
+
+        String regex = "[^\\w%s]+";
+
+        StringBuilder sb = new StringBuilder();
+        for (char ch : customWordChars) {
+            sb.append(ch);
+        }
+
+        String insert = sb.toString();
+        return Pattern.compile(String.format(regex, insert));
+    }
+
+    private static boolean customNonWordCharsRequired( String object, char... customWordChars) {
+
+        for (char ch : customWordChars) {
+            if (object.indexOf(ch) != -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean test(String input, String object, char... customWordChars) {
 
         if (input.equals("")) return true;
 
-        return new CamelCaseMatch(input, object).matches();
+        boolean altWordsRequired = customWordChars.length > 0 &&
+                customNonWordCharsRequired(object, customWordChars);
+
+        List<String> defaultAvailableWords = createAvailableWords(DEFAULT_DELIMITER, object);
+        boolean defaultMatches = new CamelCaseMatch(input, object, defaultAvailableWords).matches();
+        if (defaultMatches) {
+            return true;
+        } else if (altWordsRequired) {
+            Pattern customDelimiter = createCustomDelimiter(customWordChars);
+            List<String> altAvailableWords = createAvailableWords(customDelimiter, object);
+            return new CamelCaseMatch(input, object, altAvailableWords).matches();
+        }
+        else return false;
     }
 
     private boolean matches() {
 
-        Option firstLetter = new Option();
+        Option firstLetter = new Option(availableWords);
         options.add(firstLetter);
 
         while (!stringParsed && !options.isEmpty()) {
@@ -62,10 +106,10 @@ public class CamelCaseMatch {
         final private int currentIndexOfCurrentWord;
         final private Optional<Character> currentWordChar;
 
-        private Option() {
+        private Option(List<String> availableWords) {
 
             currentIndexOfInput = 0;
-            availableWords = initializeAvailableWords();
+            this.availableWords = availableWords;
             currentIndexOfCurrentWord = 0;
             currentWord = Optional.empty();
             currentWordChar = Optional.empty();
@@ -85,16 +129,13 @@ public class CamelCaseMatch {
                     (s -> s.charAt(currentIndexOfCurrentWord));
             }
 
-        private List<String> initializeAvailableWords() {
-            return Stream.of(nonWordChars.split(object))
-                    .map(String::toLowerCase)
-                    .collect(Collectors.toUnmodifiableList());
-        }
-
-
         public List<Option> explore() {
 
             List<Option> nextBranch = new ArrayList<>();
+
+            if (currentInputChar == ' ') {
+                nextBranch.add(getNewOptionDestroyCurrentWord(availableWords));
+            }
 
             if (matchesCurrentWord()) {
 
@@ -155,7 +196,6 @@ public class CamelCaseMatch {
                     newCurrentIndexOfCurrentWord, newCurrentWord);
         }
 
-        // TODO: 3/7/20 fix one letter word bug (again) 
         private Option getNewOptionReplaceCurrentWord(String newWord) {
 
             Optional<String> newCurrentWord = Optional.of(newWord);
