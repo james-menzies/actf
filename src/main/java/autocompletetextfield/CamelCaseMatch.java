@@ -162,7 +162,9 @@ public class CamelCaseMatch {
         }
 
         public boolean completePath() {
-            return matchesCurrentWord() || getNewWordMatches().size() > 0;
+            return currentInputChar == ' ' ||
+                    matchesCurrentWord() ||
+                    getNewWordMatches().size() > 0;
         }
 
         private boolean matchesCurrentWord() {
