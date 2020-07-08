@@ -22,6 +22,11 @@ public class AutoCompleteTextField<T> extends TextField {
     private AutoCompleteTextFieldVM<T> viewModel;
     private DoubleProperty rowHeight;
     private IntegerProperty maxRows;
+    private static double DEFAULT_ROW_HEIGHT = 25.0;
+    private static int DEFAULT_MAX_ROWS = 10;
+
+
+
     private static final BiPredicate<String, String> DEFAULT_MATCHING_ALGORITHM =
             (s1, s2) -> CamelCaseMatch.test(s1, s2, '\'', '-');
 
@@ -47,9 +52,9 @@ public class AutoCompleteTextField<T> extends TextField {
         rowHeight.addListener( (v, o, n) -> {
             listView.setFixedCellSize((Double) n);
         });
-        rowHeight.setValue(25.0);
+        rowHeight.setValue(DEFAULT_ROW_HEIGHT);
 
-        maxRows = new SimpleIntegerProperty(8);
+        maxRows = new SimpleIntegerProperty(DEFAULT_MAX_ROWS);
 
         listView.prefHeightProperty().bind(
                 viewModel.createListHeightProperty(maxRows, rowHeight));
@@ -81,6 +86,22 @@ public class AutoCompleteTextField<T> extends TextField {
                 Event.fireEvent(this, e);
             }
         });
+    }
+
+    public static void setDefaultRowHeight(double defaultRowHeight) {
+        DEFAULT_ROW_HEIGHT = defaultRowHeight;
+    }
+
+    public static void setDefaultMaxRows(int defaultMaxRows) {
+        DEFAULT_MAX_ROWS = defaultMaxRows;
+    }
+
+    public void setRowHeight(double rowHeight) {
+        this.rowHeight.set(rowHeight);
+    }
+
+    public void setMaxRows(int maxRows) {
+        this.maxRows.set(maxRows);
     }
 
     public ObjectProperty<T> selectedObjectProperty() {
