@@ -19,9 +19,7 @@ import javafx.stage.Stage;
 import utils.Person;
 import utils.SamplePersonData;
 
-
 import java.io.IOException;
-import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 public class MainApp extends Application {
@@ -78,6 +76,8 @@ public class MainApp extends Application {
         HBox.setHgrow(actf, Priority.ALWAYS);
         inputDropIn.getChildren().add(actf);
 
+        actf.setMaxRows(5);
+        actf.setRowHeight(35);
 
         bindPersonAttributeLabel(selectedFirstName, Person::getFirstName);
         bindPersonAttributeLabel(selectedLastName, Person::getLastName);
