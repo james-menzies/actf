@@ -6,7 +6,9 @@ import org.apache.commons.csv.CSVRecord;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -26,12 +28,12 @@ public class SamplePersonData {
 
     private static void initializeData() {
 
-        URL source = SamplePersonData.class.getResource("/utils/details.csv");
+
 
         try {
-            FileReader reader = new FileReader(source.getFile());
+            InputStream inputStream = SamplePersonData.class.getResourceAsStream("/utils/details.csv");
 
-            CSVParser parser = CSVParser.parse(reader, CSVFormat.DEFAULT);
+            CSVParser parser = CSVParser.parse(inputStream, Charset.defaultCharset(), CSVFormat.DEFAULT);
             Iterator<CSVRecord> iterator = parser.iterator();
 
             if (!iterator.hasNext()) return;
