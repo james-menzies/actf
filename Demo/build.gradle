@@ -1,0 +1,15 @@
+
+plugins {
+    id 'org.beryx.runtime' version '1.11.4'
+}
+
+mainClassName = 'demo.Launcher'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':FXTextFieldAC')
+    implementation 'org.apache.commons:commons-csv:1.8'
+}

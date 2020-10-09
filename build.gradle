@@ -7,31 +7,34 @@
 
 plugins {
 
-    id 'java'
-    id 'application'
-    id 'org.openjfx.javafxplugin' version '0.0.9'
-}
-
-sourceCompatibility = 14
-group = 'org.menzies'
-
-application {
-    mainClass = "demo.MainApp"
-}
-
-repositories {
-    mavenCentral()
-}
-
-javafx {
-    version = "14"
-    modules = [ 'javafx.controls', 'javafx.fxml', ]
+    id 'org.openjfx.javafxplugin' version '0.0.9' apply false
 }
 
 
-dependencies {
+allprojects {
+    group = 'org.menzies'
 
-    testImplementation 'junit:junit:4.13'
-    implementation 'org.apache.commons:commons-csv:1.8'
+    repositories {
+        mavenCentral()
+    }
+}
+
+
+subprojects {
+
+    apply plugin: 'org.openjfx.javafxplugin'
+    apply plugin: 'java'
+
+    sourceCompatibility = 14
+
+    javafx {
+        version = "14"
+        modules = ['javafx.controls', 'javafx.fxml',]
+    }
+
+    dependencies {
+
+        testImplementation 'junit:junit:4.13'
+    }
 }
 
