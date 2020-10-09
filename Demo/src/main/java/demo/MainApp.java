@@ -51,6 +51,11 @@ public class MainApp extends Application {
 
     private AutoCompleteTextField<Person> actf;
 
+    public static void main(String[] args) {
+
+        Application.launch(args);
+    }
+
     @FXML
     private void initialize() {
 
