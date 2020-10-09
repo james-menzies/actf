@@ -12,7 +12,8 @@ plugins {
 
 
 allprojects {
-    group = 'org.menzies'
+    group = "com.menzies"
+    version = '0.5'
 
     repositories {
         mavenCentral()

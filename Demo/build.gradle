@@ -2,12 +2,29 @@
 plugins {
     id 'org.beryx.runtime' version '1.11.4'
 }
-
-mainClassName = 'demo.Launcher'
+application {
+    mainClassName = 'demo.Launcher'
+    applicationName = 'AutoComplete TextField Demo'
+}
 
 repositories {
     mavenCentral()
 }
+
+runtime {
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    launcher {
+        noConsole = true
+    }
+
+    jpackage {
+        def currentOs = org.gradle.internal.os.OperatingSystem.current()
+        if(currentOs.windows) {
+            installerOptions += ['--win-dir-chooser', '--win-menu', '--win-shortcut']
+        }
+    }
+}
+
 
 dependencies {
     implementation project(':FXTextFieldAC')
