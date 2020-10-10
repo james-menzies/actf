@@ -43,7 +43,9 @@ jobs:
           architecture: x64
       - name: Build Project with Gradle
         run: |
+          chmod 775 ./gradlew
           ./gradlew build
+          ./gradlew jpackage
   create-release:
     name: Create Release with Installers
     runs-on: ubuntu-latest
