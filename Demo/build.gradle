@@ -22,6 +22,10 @@ runtime {
         if(currentOs.windows) {
             installerOptions += ['--win-dir-chooser', '--win-menu', '--win-shortcut']
         }
+        if(currentOs.linux) {
+            installerType = 'deb'
+            installerOptions += ['--linux-shortcut']
+        }
     }
 }
 

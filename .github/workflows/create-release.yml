@@ -45,7 +45,14 @@ jobs:
         run: |
           chmod 775 ./gradlew
           ./gradlew build
+      - name: Build Installer
+        run: |
           ./gradlew jpackage
+      - name: Upload Linux Deb File
+        uses: actions/upload-artifact@v2
+        with:
+          name: ubuntu-deb-file
+          path: Demo/build/jpackage/*.deb
   create-release:
     name: Create Release with Installers
     runs-on: ubuntu-latest
@@ -69,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        filename: [windows-installer, ubuntu-installer]
+        filename: [windows-installer, ubuntu-deb-file]
     steps:
       - name: Download uploaded artifact
         uses: actions/download-artifact@v2
