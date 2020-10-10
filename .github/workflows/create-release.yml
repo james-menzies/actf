@@ -35,7 +35,7 @@ jobs:
     needs: create-windows-installer
     strategy:
       matrix:
-        filename: [windows-installer,]
+        filename: [windows-installer, hmm]
     steps:
       - name: Download Windows Artifact
         uses: actions/download-artifact@v2
@@ -74,4 +74,4 @@ jobs:
           delete_release: true
           tag_name: v1.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GTIHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
