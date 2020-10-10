@@ -29,6 +29,21 @@ jobs:
         with:
           name: windows-installer
           path: Demo/build/jpackage/*.msi
+  create-ubuntu-installer:
+    name: Create Ubuntu Installer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Install Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: '14.0.2'
+          java-package: jdk
+          architecture: x64
+      - name: Build Project with Gradle
+        run: |
+          ./gradlew build
   create-release:
     name: Create Release with Installers
     runs-on: ubuntu-latest
@@ -52,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        filename: [windows-installer]
+        filename: [windows-installer, ubuntu-installer]
     steps:
       - name: Download uploaded artifact
         uses: actions/download-artifact@v2
