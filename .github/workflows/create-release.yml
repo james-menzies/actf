@@ -36,8 +36,6 @@ jobs:
     outputs:
       url: ${{ steps.create_release.outputs.upload_url }}
     steps:
-    - name: No Worries
-      run: echo 'hello'
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -60,7 +58,7 @@ jobs:
         uses: actions/download-artifact@v2
       - name: Zip artifact
         run : |
-          zip ${{ matrix.filename }}.zip ${{ matrix.filename }}
+          zip -r ${{ matrix.filename }}.zip ${{ matrix.filename }}/*
       - name: Upload to Release
         uses: actions/upload-release-asset@v1
         env:
