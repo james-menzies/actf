@@ -29,12 +29,17 @@ jobs:
         with:
           name: windows-installer
           path: Demo/build/jpackage/*.msi
-
-
-#  create-release:
-#    name: Create a Github Release
-#    runs-on: ubuntu-latest
-#    steps:
+  create-release:
+    name: Create Release with Installers
+    runs-on: ubuntu-latest
+    needs: create-windows-installer
+    steps:
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v2
+        with:
+          - path: artifacts
+      - name: View Directory
+        run: ls -R
 #      - name: Create Release
 #        id: create_release
 #        uses: actions/create-release@v1
@@ -42,6 +47,6 @@ jobs:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #        with:
 #          tag_name: v1.0
-#          release_name: My Conflicted Test ReleaseK
-#          draft: false
+#          release_name: Test Release
+#          draft: true
 #          prerelease: true
