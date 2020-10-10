@@ -63,7 +63,6 @@ jobs:
           asset_content_type: application/zip
   delete-failed-release:
     name: Delete Release on Build Failure
-    needs: upload-installers
     runs-on: ubuntu-latest
     if: needs.upload-installers.result == 'failure'
     steps:
