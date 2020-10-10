@@ -33,9 +33,9 @@ jobs:
     name: Create Release with Installers
     runs-on: ubuntu-latest
     needs: create-windows-installer
-#    strategy:
-#      matrix:
-#        filename: ["windows-installer", "hmm"]
+    strategy:
+      matrix:
+        filename: ["windows-installer", "hmm"]
     steps:
       - name: Download Windows Artifact
         uses: actions/download-artifact@v2
@@ -62,16 +62,16 @@ jobs:
           asset_path: artifacts/${{ matrix.filename }}
           asset_name: ${{ matrix.filename }}
           asset_content_type: application/zip
-#  delete-failed-release:
-#    name: Delete Release on Build Failure
-#    needs:
-#      create-release:
-#        result: failure
-#    steps:
-#      - name: Delete Tag and Release
-#        uses: dev-drprasad/delete-tag-and-release@v0.1.2
-#        with:
-#          delete_release: true
-#          tag_name: v1.0
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  delete-failed-release:
+    name: Delete Release on Build Failure
+    needs:
+      - create-release:
+          result: failure
+    steps:
+      - name: Delete Tag and Release
+        uses: dev-drprasad/delete-tag-and-release@v0.1.2
+        with:
+          delete_release: true
+          tag_name: v1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
