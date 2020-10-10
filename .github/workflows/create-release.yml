@@ -15,5 +15,5 @@ jobs:
         with:
           tag_name: v1.0
           release_name: My Test Release
-          draft: true
+          draft: false
           prerelease: true
