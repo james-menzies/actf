@@ -35,7 +35,7 @@ jobs:
     needs: create-windows-installer
     strategy:
       matrix:
-        filename: [windows-installer, hmm]
+        filename: ["windows-installer", "hmm"]
     steps:
       - name: Download Windows Artifact
         uses: actions/download-artifact@v2
