@@ -3,17 +3,34 @@ on:
 
 
 jobs:
-  create-release:
-    name: Create a Github Release
-    runs-on: ubuntu-latest
+  create-windows-installer:
+    name: Create Windows Installer
+    runs-on: windows-latest
     steps:
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Install Java
+        uses: actions/setup-java@v1
         with:
-          tag_name: v1.0
-          release_name: My Conflicted Test ReleaseK
-          draft: false
-          prerelease: true
+          java-version: '14.0.2'
+          java-package: jdk
+          architecture: x64
+      - name: Build application w Gradle
+        run: |
+          gradlew.bat build
+
+
+#  create-release:
+#    name: Create a Github Release
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Create Release
+#        id: create_release
+#        uses: actions/create-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: v1.0
+#          release_name: My Conflicted Test ReleaseK
+#          draft: false
+#          prerelease: true
