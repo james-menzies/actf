@@ -17,7 +17,13 @@ jobs:
           architecture: x64
       - name: Build application w Gradle
         run: |
-          dir
+          cmd.exe /c 'gradlew.bat build'
+      - name: Install Wix Tools
+        run: |
+          choco install wixtools
+      - name: Build Installer
+        run: |
+          cmd.exe /c 'gradlew.bat jpackage'
 
 
 #  create-release:
