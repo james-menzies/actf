@@ -20,7 +20,7 @@ jobs:
           cmd.exe /c 'gradlew.bat build'
       - name: Install Wix Tools
         run: |
-          choco install wixtools
+          choco install wixtoolset -y
       - name: Build Installer
         run: |
           cmd.exe /c 'gradlew.bat jpackage'
