@@ -67,7 +67,7 @@ jobs:
     name: Delete Release on Build Failure
     runs-on: ubuntu-latest
     needs: upload-installers
-    if: 'failure' == 'failure'
+    if: ${{ 'failure' == 'failure' }}
     steps:
       - name: Delete Tag and Release
         uses: dev-drprasad/delete-tag-and-release@v0.1.2
