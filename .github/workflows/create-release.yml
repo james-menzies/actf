@@ -33,9 +33,9 @@ jobs:
     name: Create Release with Installers
     runs-on: ubuntu-latest
     needs: create-windows-installer
-    strategy:
-      matrix:
-        filename: ["windows-installer", "hmm"]
+#    strategy:
+#      matrix:
+#        filename: ["windows-installer", "hmm"]
     steps:
       - name: Download Windows Artifact
         uses: actions/download-artifact@v2
