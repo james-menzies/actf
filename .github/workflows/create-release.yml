@@ -33,17 +33,17 @@ jobs:
     name: Create Release with Installers
     runs-on: ubuntu-latest
 #    needs: create-windows-installer
-      steps:
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v1.0
-          release_name: Test Release
-          draft: true
-          prerelease: true
+    steps:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v1.0
+        release_name: Test Release
+        draft: true
+        prerelease: true
   upload-installers:
     name: Upload Instrallers
     needs: create-release
