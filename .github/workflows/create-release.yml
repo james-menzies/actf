@@ -1,0 +1,14 @@
+on:
+  push:
+
+
+jobs:
+  create-release:
+    name: Create a Github Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: See Directory
+        run: |
+          ls
