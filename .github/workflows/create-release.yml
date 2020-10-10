@@ -47,6 +47,7 @@ jobs:
   upload-installers:
     name: Upload Instrallers
     needs: create-release
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         filename: [windows-installer]
@@ -63,6 +64,7 @@ jobs:
   delete-failed-release:
     name: Delete Release on Build Failure
     needs: upload-installers
+    runs-on: ubuntu-latest
     if: needs.upload-installers.result == failure
     steps:
       - name: Delete Tag and Release
