@@ -16,7 +16,6 @@ import javafx.stage.Popup;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
-// TODO: 3/7/20 Write documentation!
 public class AutoCompleteTextField<T> extends TextField {
 
     private AutoCompleteTextFieldVM<T> viewModel;
