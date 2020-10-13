@@ -37,8 +37,8 @@ class AutoCompleteTextFieldVM<T> {
         return selectedSuggestion;
     }
 
-    ObjectProperty<T> selectedObjectProperty() {
-        return selectedObject;
+    ReadOnlyObjectProperty<T> selectedObjectProperty() {
+        return selectedObject.getReadOnlyProperty();
     }
 
 

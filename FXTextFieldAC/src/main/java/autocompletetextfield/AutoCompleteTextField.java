@@ -103,7 +103,7 @@ public class AutoCompleteTextField<T> extends TextField {
         this.maxRows.set(maxRows);
     }
 
-    public ObjectProperty<T> selectedObjectProperty() {
+    public ReadOnlyObjectProperty<T> selectedObjectProperty() {
         return viewModel.selectedObjectProperty();
     }
 
