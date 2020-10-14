@@ -121,10 +121,22 @@ Of course, you can supply your own custom implementation as well by providing th
 
 ### Camel Case Match
 
-The recommended and default matching algorithm is the **Camel Case Match**. It works by checking to see if the input contains partially completed words of the object it is matched against. **_There is no need for spaces to exist in the user input, nor do the partially completed words need to be correct order._** This means that both **"jodo"** and **"dojo"** will match against the name "John Doe". Spaces can be added to the input, as long as it doesn't break up a word in the object itself.
+The recommended and default matching algorithm is the **Camel Case Match**. It works by checking to see if the input contains partially completed words of the object it is matched against. 
+
+**_There is no need for spaces to exist in the user input, nor do the partially completed words need to be correct order._** 
+
+This means that both **"jodo"** and **"dojo"** will match against the name **"John Doe"**. 
+
+Spaces can be added to the input, as long as it doesn't break up a word in the object itself.
 "jo hn" for instance would not be a match against "John Doe" whereas "jo do" would.
 
-There is also special consideration for not alphabet characters as well. There is a way to specify whether you would like to treat a non-alphabit character 
+There is also special consideration for non-alphabet characters as well. If you like, you can make the algorithm treat non-alphabetic characters as though they were spaces. **_By default_** hyphens and apostrophes are treated in this way. For example, consider the name **"John Doe-Smith". If the default implementation was being used, **"dosm"**, **"smdoj"**, and **"doe-sj"** would all be successful matches. 
 
+Here is an example of a Camel Case Match being created which treats asterisks, dollar signs and question marks as spaces:
+
+```java
+BiPredicate<String, String> algorithm = 
+    MatchingAlgorithms.getCamelMatch('*', '$', '?');
+```
 
 ## Demo
