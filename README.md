@@ -1,4 +1,4 @@
-# AutoComplete TextField
+# AutoComplete TextField for Java FX
 
 The AutoComplete TextField control allows end users to select an item from an arbitrarily large list. This is achieved by partially typing the desired selection into a text field, whilst the control dynamically filters the results based on the user input. The user is able to navigate up and down through the filtered suggestions, and select the desired object with the 'TAB' key.
 
@@ -11,6 +11,9 @@ Whilst Java FX has robust support for selecting items from a list, whether it be
 ## Demo
 
 Before diving into the rest of the documentation, you might want to check out a small functional demonstration of the control. In this example, 5000 `Person` objects are created and stored in a list for the user to choose from. You can scroll through the complete list on the left of the application.
+
+![A screenshot of a demo for the ACTF control.](docs/screenshots/demo-screenshot.png)
+
 
 To try out the auto-complete function, begin typing in the `TextField` below and watch as the control automatically populates a list of suggestions for you. If you hit 'TAB' the `Person` object will be selected, and you'll be able to see the app dynamically update the complete information about that particular person. Note that you can continue to select other person objects at will and the app will continue to update the display.
 
@@ -75,8 +78,8 @@ Next, we will create a couple of instances of this class, and put them into a li
 Person person1 = new Person("Jane", "Doe");
 Person person2 = new Person("John", "Doe");
 
-ObservableList<Person> options = FXCollections.observableArrayList(person1, person2);
-
+ObservableList<Person> options = 
+        FXCollections.observableArrayList(person1, person2);
 ```
 Finally, we instantiate an instance of `AutoCompleteTextField` in the following way:
 
