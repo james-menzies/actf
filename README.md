@@ -66,7 +66,7 @@ var personSelectControl = new AutoCompleteTextField<Person>(options);
 All we then have to do is attach this control to the scene graph of our application and our new control is functional! 
 
 
-#### Retrieval
+### Retrieval
 
 For retrieving the selected object there are two approaches:
 
@@ -81,9 +81,23 @@ Person selectedPerson = personSelectControl.getSelectedObject();
 ```java
 Person selectedPerson = personSelectcontrol.selectedObjectProperty();
 ```
-> This would be ideal if the selected object was required to dynamically update the display upon selection. Data validation messages for instance would be a typical use case for this method.
+> This would be ideal if the selected object was required to dynamically update the display upon selection. For instance, data validation messages would be a typical use case for this method.
 
-## How to use
+### Object-to-String Conversion
+
+Since `AutoCompleteTextField` is used to select from an object of any type, there needs to be a mechanism to map an object to a `String` so that the control can match it against the user input. By default, the control uses the `toString()` method of the object to do so. It is generally good practice for user-defined objects to override this method, hence why it is the default. However, if another implementation is desired it can be provided at creation time. Here is an example using the `Person` object from the example above:
+```java
+Function<Person, String> conversion = person -> 
+        String.format("%s, %s", person.getLastName, person.getFirstName);
+
+var personSelectControl = new AutoCompleteTextField<Person>(options,
+        AutoCompleteTextField.DEFAULT_MATCHING_ALGORITHM, conversion);
+
+```
+Note that in order to provide a custom conversion implementation, you also need to provide a matching algorithm [see below](#matching-algorithm) as well. However, this isn't much of a drawback as you can use the default by simply supplying the `DEFAULT_MATCHING_ALGORITHM` field variable.
+
+### Matching Algorithm
+
 
 
 
