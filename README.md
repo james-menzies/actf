@@ -98,7 +98,33 @@ Note that in order to provide a custom conversion implementation, you also need 
 
 ### Matching Algorithm
 
+Another integral part of the control is the method by which the input from the user is matched with the string representation of the object so it can be filtered. The module contains some convenient pre-configured options for the developer to choose from in the `MatchingAlgorithms` class. **_None of these options are case-sensitive._** Currently the options available are:
 
+* **Camel Case Match:** This will match the input against the object if it contains incomplete words of the object. This is the default configuration for ACTF and a detailed explanation is [below](#camel-case-match).
+* **Exact Match:** This will only match if the input is an incomplete but exact match from the start of the string. For example, **'app'** will match against **'Apple'**, but **'ppl'** will not.
+* **Sub-String Match:** This will match provided that the input is a substring of the object. In this case, both **'app'** and **'ppl'** will match against **'Apple'**.
+
+Here is an example using the sub-string match as a custom implementation:
+
+```java
+// make sure to include this import...
+import com.menzies.actf.MatchingAlgorithms;
+
+//
+
+var personSelectControl = AutoCompleteTextField<Person>(options,
+                    MatchingAlgorithms.SUB_STRING_MATCH,
+                    obj -> obj.toString())   
+```
+Of course, you can supply your own custom implementation as well by providing the standard `BiPredicate<String, String>` functional interface.
+
+
+### Camel Case Match
+
+The recommended and default matching algorithm is the **Camel Case Match**. It works by checking to see if the input contains partially completed words of the object it is matched against. **_There is no need for spaces to exist in the user input, nor do the partially completed words need to be correct order._** This means that both **"jodo"** and **"dojo"** will match against the name "John Doe". Spaces can be added to the input, as long as it doesn't break up a word in the object itself.
+"jo hn" for instance would not be a match against "John Doe" whereas "jo do" would.
+
+There is also special consideration for not alphabet characters as well. There is a way to specify whether you would like to treat a non-alphabit character 
 
 
 ## Demo
