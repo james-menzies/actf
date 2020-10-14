@@ -1,8 +1,7 @@
-package autocompletetextfield;
+package com.redbrickhut.actf;
 
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.event.Event;

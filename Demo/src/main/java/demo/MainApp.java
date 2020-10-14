@@ -1,6 +1,6 @@
 package demo;
 
-import autocompletetextfield.AutoCompleteTextField;
+import com.redbrickhut.actf.AutoCompleteTextField;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
