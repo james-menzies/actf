@@ -158,7 +158,7 @@ Spaces can be added to the input, as long as it doesn't break up a word in the o
 
 There is also special consideration for non-alphabet characters as well. If you like, you can make the algorithm treat non-alphabetic characters as though they were spaces. **_By default_** hyphens and apostrophes are treated in this way. 
 
-For example, consider the name **"John Doe-Smith"**. If the default implementation was being used, **"dosm"**, **"smdoj"**, and **"doe-sj"** would all be successful matches. 
+For example, consider the name **"John Doe-Smith"**. If the default implementation were being used, **"dosm"**, **"smdoj"**, and **"doe-sj"** would all be successful matches. 
 
 Here is an example creating a Camel Case Match which treats asterisks, dollar signs and question marks as spaces:
 
