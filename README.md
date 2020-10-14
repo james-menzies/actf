@@ -8,7 +8,7 @@ Whilst Java FX has robust support for selecting items from a list, whether it be
 
 ## Instructions
 
-> I highly recommend anyone using this control have a solid understanding of the Property binding system in Java FX. [I would highly recommend this article by Oracle](https://docs.oracle.com/javafx/2/binding/jfxpub-binding.htm#:~:text=JavaFX%20properties%20are%20often%20used,in%20a%20variety%20of%20applications.) if you're relatively new to the Java FX platform.
+> I highly recommend anyone using this control have a solid understanding of the Property binding system in Java FX. [This article by Oracle](https://docs.oracle.com/javafx/2/binding/jfxpub-binding.htm#:~:text=JavaFX%20properties%20are%20often%20used,in%20a%20variety%20of%20applications.) will provide a solid background if you're relatively new to the Java FX platform.
 
 ### First Steps
 
@@ -29,7 +29,7 @@ In order to instantiate an ACTF, it requires as a minimum a list of objects for 
 Firstly, let's create our basic Person class:
 ```java
 public class Person {
-    
+
     private String firstName;
     private String lastName;
 
@@ -38,13 +38,50 @@ public class Person {
         this.lastName = lastName;
     }
     // getters and setters
-    
-    
 
 
+    @Override
+    public String toString() {
+        return String.format("%s %s", firstName, lastName.toUpperCase());
+    }
 }
 ```
+Next, we will create a couple of instances of this class, and put them into a list:
 
+```java
+Person person1 = new Person("Jane", "Doe");
+Person person2 = new Person("John", "Doe");
+
+ObservableList<Person> options = FXCollections.observableArrayList(person1, person2);
+
+```
+Finally, we instantiate an instance of `AutoCompleteTextField` in the following way:
+
+> Note here we are using the "var" syntax, which is a Java 9 + feature only.
+
+```java
+var personSelectControl = new AutoCompleteTextField<Person>(options);
+```
+
+All we then have to do is attach this control to the scene graph of our application and our new control is functional! 
+
+
+#### Retrieval
+
+For retrieving the selected object there are two approaches:
+
+**Retrieval-by-value**: The simpler of the two options, calling this method will statically retrieve the value of the selected object:
+```java
+Person selectedPerson = personSelectControl.getSelectedObject();
+```
+> This method would be the preferred approach when being used as part of a event handler, say when the user clicks a 'Confirm' button.
+
+**Retrieval-by-property**: Calling this method will return the value wrapped in an `ReadOnlyObjectProperty` instance:
+
+```java
+Person selectedPerson = personSelectcontrol.selectedObjectProperty();
+```
+> This would be ideal if the selected object was required to dynamically update the display upon selection. Data validation messages for instance would be a typical use case for this method.
 
 ## How to use
 
