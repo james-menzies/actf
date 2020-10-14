@@ -4,11 +4,30 @@ The AutoComplete TextField control allows end users to select an item from an ar
 
 Whilst Java FX has robust support for selecting items from a list, whether it be a `ListView` or employing a set of `CheckBox` or `RadioButton` objects, it becomes cumbersome to cleanly navigate the options as the list grows infinitely large. That's where the AutoComplete TextField comes in, as it can account for really large lists whilst keeping the interface clean.
 
+## Demo
+
+Before diving into the rest of the documentation, you might want to check out a small functional demonstration of the control. In this example, 5000 `Person` objects are created and stored in a list for the user to choose from. You can scroll through the complete list on the left of the application.
+
+To try out the auto-complete function, begin typing in the `TextField` below and watch as the control automatically populates a list of suggestions for you. If you hit 'TAB' the `Person` object will be selected, and you'll be able to see the app dynamically update the complete information about that particular person. Note that you can continue to select other person objects at will and the app will continue to update the display.
+
+To install the demo, please click on the [releases](https://github.com/redbrickhut/FXTextFieldAC/releases) page and download the appropriate version for your platform under the "Assets" heading. Or, if you want the 'bleeding-edge' version you can clone the repository to your machine ([see below](#how-to-install)) and then run the following command from root of the project directory:
+
+**Windows Command Prompt**
+```
+gradlew.bat run
+```
+
+**Linux/Mac**
+```
+./gradlew run
+```
 ## How to Install
 
 ## Instructions
 
 > I highly recommend anyone using this control have a solid understanding of the Property binding system in Java FX. [This article by Oracle](https://docs.oracle.com/javafx/2/binding/jfxpub-binding.htm#:~:text=JavaFX%20properties%20are%20often%20used,in%20a%20variety%20of%20applications.) will provide a solid background if you're relatively new to the Java FX platform.
+
+> There are complete Javadocs planned for this control in a future version.
 
 ### First Steps
 
@@ -128,15 +147,16 @@ The recommended and default matching algorithm is the **Camel Case Match**. It w
 This means that both **"jodo"** and **"dojo"** will match against the name **"John Doe"**. 
 
 Spaces can be added to the input, as long as it doesn't break up a word in the object itself.
-"jo hn" for instance would not be a match against "John Doe" whereas "jo do" would.
+**"jo hn"** for instance would not be a match against **"John Doe"** whereas **"jo do"** would.
 
-There is also special consideration for non-alphabet characters as well. If you like, you can make the algorithm treat non-alphabetic characters as though they were spaces. **_By default_** hyphens and apostrophes are treated in this way. For example, consider the name **"John Doe-Smith". If the default implementation was being used, **"dosm"**, **"smdoj"**, and **"doe-sj"** would all be successful matches. 
+There is also special consideration for non-alphabet characters as well. If you like, you can make the algorithm treat non-alphabetic characters as though they were spaces. **_By default_** hyphens and apostrophes are treated in this way. 
 
-Here is an example of a Camel Case Match being created which treats asterisks, dollar signs and question marks as spaces:
+For example, consider the name **"John Doe-Smith"**. If the default implementation was being used, **"dosm"**, **"smdoj"**, and **"doe-sj"** would all be successful matches. 
+
+Here is an example creating a Camel Case Match which treats asterisks, dollar signs and question marks as spaces:
 
 ```java
 BiPredicate<String, String> algorithm = 
     MatchingAlgorithms.getCamelMatch('*', '$', '?');
 ```
 
-## Demo
