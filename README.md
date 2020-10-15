@@ -30,6 +30,53 @@ gradlew.bat run
 ```
 ## How to Install
 
+To use the AutoComplete TextField control, you will need to use either a Maven or Gradle build. 
+
+### Installing with Gradle
+
+To use ACTF with Gradle, you need to include the following in your build.gradle file:
+
+```
+repositories {
+    maven {
+        url "https://dl.bintray.com/redbrickhut/maven-repo"
+    }
+//  other repos
+}
+
+dependencies {
+    implementation 'com.redbrickhut:actf:{version_number}'
+//  other dependencies
+}
+```
+> You can implement any version according to the [releases page](https://github.com/redbrickhut/actf/releases/). For version 1.0 for example use the string 'com.redbrickhut:actf:1.0'
+
+
+### Installing with Maven
+
+You'll need to configure your `pom.xml` file in order to use ACTF with your Maven build. Firstly, include this code within your 'repositories' block:
+```xml
+
+<repository>
+    <id>redbrickhut</id>
+    <name>redbrickhut</name>
+    <url>https://dl.bintray.com/redbrickhut/maven-repo</url>
+</repository>
+
+```
+Then include the following in your 'dependencies' block:
+
+```xml
+<dependency>
+    <groupId>com.redbrickhut</groupId>
+    <artifactId>actf</artifactId>
+    <version>{version_number}</version>
+</dependency
+```
+
+> You can implement any version according to the [releases page](https://github.com/redbrickhut/actf/releases/). For version 1.0 for example use the version tag `<version>1.0</version>`
+
+
 ## Instructions
 
 > I highly recommend anyone using this control have a solid understanding of the Property binding system in Java FX. [This article by Oracle](https://docs.oracle.com/javafx/2/binding/jfxpub-binding.htm#:~:text=JavaFX%20properties%20are%20often%20used,in%20a%20variety%20of%20applications.) will provide a solid background if you're relatively new to the Java FX platform.
