@@ -27,6 +27,6 @@ runtime {
 
 
 dependencies {
-    implementation project(':FXTextFieldAC')
+    implementation project(':actf')
     implementation 'org.apache.commons:commons-csv:1.8'
 }
