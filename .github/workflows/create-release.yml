@@ -1,13 +1,27 @@
 on:
   push:
-    tags:
-      - 'v*'
 
+defaults:
+  run:
+    shell: bash
 
 jobs:
-  create-windows-installer:
-    name: Create Windows Installer
-    runs-on: windows-latest
+  create-installers:
+    name: Create Platform Targeted Executors
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        include:
+          - os: windows-latest
+            file: '*.msi'
+            wrapper: 'gradlew.bat'
+          - os: macos-latest
+            file: '*.dmg'
+            wrapper: 'gradlew'
+          - os: ubuntu-latest
+            file: '*.deb'
+            wrapper: 'gradlew'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -19,42 +33,19 @@ jobs:
           architecture: x64
       - name: Build application w Gradle
         run: |
-          cmd.exe /c 'gradlew.bat build'
+          chmod +w ./${{ matrix.wrapper }}
+          ./${{ matrix.wrapper }} build
       - name: Install Wix Tools
+        if: matrix.os == 'windows.latest'
         run: |
           choco install wixtoolset -y
       - name: Build Installer
         run: |
-          cmd.exe /c 'gradlew.bat jpackage'
-      - name: Upload Windows Installer
+          ./${{ matrix.wrapper }} jpackage
+      - name: Upload Installer
         uses: actions/upload-artifact@v2
         with:
-          name: windows-installer
-          path: Demo/build/jpackage/*.msi
-  create-ubuntu-installer:
-    name: Create Ubuntu Installer
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-      - name: Install Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: '14.0.2'
-          java-package: jdk
-          architecture: x64
-      - name: Build Project with Gradle
-        run: |
-          chmod 775 ./gradlew
-          ./gradlew build
-      - name: Build Installer
-        run: |
-          ./gradlew jpackage
-      - name: Upload Linux Deb File
-        uses: actions/upload-artifact@v2
-        with:
-          name: ubuntu-deb-file
-          path: Demo/build/jpackage/*.deb
+          path: Demo/build/jpackage/${{ matrix.file }}
   create-release:
     name: Create Release with Installers
     runs-on: ubuntu-latest
@@ -68,10 +59,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v1.0
-        release_name: Test Release
-        draft: true
-        prerelease: true
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
   upload-installers:
     name: Upload Instrallers
     needs: create-release
@@ -94,6 +85,26 @@ jobs:
           asset_path: ./${{ matrix.filename }}.zip
           asset_name: ${{ matrix.filename }}.zip
           asset_content_type: application/zip
+  maven-upload:
+    name: Upload to Bintray Maven Repo
+    needs: upload-installers
+    runs-on: ubuntu latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Install Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: '14.0.2'
+          java-package: jdk
+          architecture: x64
+      - name: Build Project with Gradle
+        run: |
+          chmod 775 ./gradlew
+          ./gradlew build
+      - name: Build Installer
+        run: |
+          ./gradlew bintrayPublish
   delete-failed-release:
     name: Delete Release on Build Failure
     runs-on: ubuntu-latest
@@ -104,6 +115,6 @@ jobs:
         uses: dev-drprasad/delete-tag-and-release@v0.1.2
         with:
           delete_release: true
-          tag_name: v1.0
+          tag_name: ${{ github.ref }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
