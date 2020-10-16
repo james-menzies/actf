@@ -49,7 +49,7 @@ jobs:
   create-release:
     name: Create Release with Installers
     runs-on: ubuntu-latest
-    needs: create-windows-installer
+    needs: create-installers
     outputs:
       url: ${{ steps.create_release.outputs.upload_url }}
     steps:
