@@ -1,9 +1,9 @@
-package autocompletetextfield;
+package com.redbrickhut.actf;
 
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import static autocompletetextfield.MatchingAlgorithms.*;
+import static com.redbrickhut.actf.MatchingAlgorithms.*;
 
 
 public class MatchingAlgorithmsTest {

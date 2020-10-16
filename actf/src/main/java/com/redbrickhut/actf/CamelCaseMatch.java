@@ -1,11 +1,11 @@
-package autocompletetextfield;
+package com.redbrickhut.actf;
 
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class CamelCaseMatch {
+class CamelCaseMatch {
 
     private final String input;
     private final String object;
@@ -53,7 +53,7 @@ public class CamelCaseMatch {
         return false;
     }
 
-    public static boolean test(String input, String object, char... customWordChars) {
+    static boolean test(String input, String object, char... customWordChars) {
 
         if (input.equals("")) return true;
 
@@ -129,7 +129,7 @@ public class CamelCaseMatch {
                     (s -> s.charAt(currentIndexOfCurrentWord));
             }
 
-        public List<Option> explore() {
+        private List<Option> explore() {
 
             List<Option> nextBranch = new ArrayList<>();
 
@@ -161,7 +161,7 @@ public class CamelCaseMatch {
             return nextBranch;
         }
 
-        public boolean completePath() {
+        private boolean completePath() {
             return currentInputChar == ' ' ||
                     matchesCurrentWord() ||
                     getNewWordMatches().size() > 0;
@@ -219,7 +219,7 @@ public class CamelCaseMatch {
             return Collections.unmodifiableList(newAvailableWords);
         }
 
-        public boolean isLast() {
+        private boolean isLast() {
             return currentIndexOfInput == input.length() - 1;
         }
     }

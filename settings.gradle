@@ -8,6 +8,6 @@
  */
 
 rootProject.name = 'FXTextFieldAC'
-include 'FXTextFieldAC'
-include 'Demo'
+include 'actf'
+include 'actf-demo'
 

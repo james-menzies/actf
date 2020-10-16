@@ -1,8 +1,7 @@
-package autocompletetextfield;
+package com.redbrickhut.actf;
 
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -16,7 +15,6 @@ import javafx.stage.Popup;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
-// TODO: 3/7/20 Write documentation!
 public class AutoCompleteTextField<T> extends TextField {
 
     private AutoCompleteTextFieldVM<T> viewModel;
@@ -104,7 +102,7 @@ public class AutoCompleteTextField<T> extends TextField {
         this.maxRows.set(maxRows);
     }
 
-    public ObjectProperty<T> selectedObjectProperty() {
+    public ReadOnlyObjectProperty<T> selectedObjectProperty() {
         return viewModel.selectedObjectProperty();
     }
 

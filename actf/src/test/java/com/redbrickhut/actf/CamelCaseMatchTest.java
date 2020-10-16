@@ -1,4 +1,4 @@
-package autocompletetextfield;
+package com.redbrickhut.actf;
 
 import org.junit.Test;
 

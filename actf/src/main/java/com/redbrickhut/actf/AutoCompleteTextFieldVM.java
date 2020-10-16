@@ -1,10 +1,9 @@
-package autocompletetextfield;
+package com.redbrickhut.actf;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ListBinding;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -37,8 +36,8 @@ class AutoCompleteTextFieldVM<T> {
         return selectedSuggestion;
     }
 
-    ObjectProperty<T> selectedObjectProperty() {
-        return selectedObject;
+    ReadOnlyObjectProperty<T> selectedObjectProperty() {
+        return selectedObject.getReadOnlyProperty();
     }
 
 
