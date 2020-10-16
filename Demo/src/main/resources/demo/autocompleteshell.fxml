@@ -54,11 +54,7 @@
                      </children>
                   </GridPane>
                   <HBox fx:id="inputDropIn" layoutX="14.0" layoutY="301.0" prefHeight="25.0" prefWidth="332.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
-                  <Label layoutX="87.0" layoutY="21.0" text="Person Details">
-                     <font>
-                        <Font size="26.0" />
-                     </font>
-                  </Label>
+                  <Label layoutX="87.0" layoutY="21.0" text="Person Details"></Label>
                </children>
             </AnchorPane>
          </children>
