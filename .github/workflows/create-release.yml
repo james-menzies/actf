@@ -45,7 +45,7 @@ jobs:
       - name: Upload Installer
         uses: actions/upload-artifact@v2
         with:
-          path: Demo/build/jpackage/${{ matrix.file }}
+          path: actf-demo/build/jpackage/${{ matrix.file }}
   create-release:
     name: Create Release with Installers
     runs-on: ubuntu-latest
