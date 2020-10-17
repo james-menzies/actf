@@ -13,7 +13,7 @@ plugins {
 
 allprojects {
     group = "com.menzies"
-    version = '1.2'
+    version = '1.0'
 
     repositories {
         mavenCentral()

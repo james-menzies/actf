@@ -1,5 +1,7 @@
 on:
   push:
+    tags:
+      - "v*"
 
 defaults:
   run:
@@ -84,11 +86,11 @@ jobs:
           architecture: x64
       - name: Build Project with Gradle
         run: |
-          chmod 775 ./gradlew
+          chmod +w ./gradlew
       - name: Build Installer
         env:
           BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-          BINTRAY_KEY: ${{ secrets.BITNRAY_KEY }}
+          BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
         run: |
           ./gradlew bintrayUpload
   delete-failed-release:
