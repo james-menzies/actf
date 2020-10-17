@@ -54,10 +54,6 @@ jobs:
         run: |
           chmod +w ./${{ matrix.wrapper }}
           ./${{ matrix.wrapper }} build
-      - name: Install Wix Tools
-        if: ${{ matrix.os }} == 'windows.latest'
-        run: |
-          choco install wixtoolset -y
       - name: Build Installer
         id: build-installer
         run: |
