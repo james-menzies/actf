@@ -62,7 +62,7 @@ jobs:
         id: build-installer
         run: |
           ./${{ matrix.wrapper }} jpackage
-          echo ::set-output name=FILE_NAME::$(find $BUILD_PATH -maxdepth 1 -name ${{ os.file }} -exec basename {} \;)
+          echo ::set-output name=FILE_NAME::$(find $BUILD_PATH -maxdepth 1 -name ${{ matrix.os.file }} -exec basename {} \;)
       - name: Upload Installer
         id: upload-installer
         uses: actions/upload-release-asset@v1
