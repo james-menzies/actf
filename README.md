@@ -43,7 +43,7 @@ Note that you'll need Java 14 installed on your system in order to do this.
 
 ## How to Install
 
-To use the AutoComplete TextField control, you will need to use either a Maven or Gradle build. 
+To use the AutoComplete TextField control, you will need to use either a Maven or Gradle build. I would recommend using Java 11+ when using this control. I haven't tested it with earlier versions.
 
 ### Installing with Gradle
 
@@ -64,7 +64,7 @@ dependencies {
 ```
 > You can implement any version according to the [releases page](https://github.com/redbrickhut/actf/releases/). For version 1.0 for example use the string 'com.redbrickhut:actf:1.0'
 
-I would recommend using Java 11+ when using this control. I haven't tested it with earlier versions.
+
 
 ### Installing with Maven
 
