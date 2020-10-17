@@ -57,8 +57,10 @@ jobs:
       - name: Build Installer
         id: build-installer
         run: |
+          find ${{ env.BUILD_PATH }} -maxdepth 1 -name ${{ matrix.os.file }} -exec basename {} \;
           ./${{ matrix.wrapper }} jpackage
-          echo ::set-env name=FILE_NAME::$(find ${{ env.BUILD_PATH }} -maxdepth 1 -name ${{ matrix.os.file }} -exec basename {} \;)
+
+          echo ::set-env name=FILE_NAME::$()
       - name: Upload Installer
         id: upload-installer
         uses: actions/upload-release-asset@v1
