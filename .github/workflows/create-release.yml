@@ -58,7 +58,7 @@ jobs:
         id: build-installer
         run: |
           ./${{ matrix.wrapper }} jpackage
-          echo ::set-output name=FILE_NAME::$(find $BUILD_PATH -maxdepth 1 -name ${{ matrix.os.file }} -exec basename {} \;)
+          echo ::set-env name=FILE_NAME::$(find $BUILD_PATH -maxdepth 1 -name ${{ matrix.os.file }} -exec basename {} \;)
       - name: Upload Installer
         id: upload-installer
         uses: actions/upload-release-asset@v1
@@ -66,8 +66,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.url }}
-          asset_path: ${{ env.BUILD_PATH }}${{ steps.build-installer.outputs.FILE_NAME }}
-          asset_name: ${{ steps.build-installer.outputs.FILE_NAME }}
+          asset_path: ${{ env.BUILD_PATH }}${{ env.FILE_NAME }}
+          asset_name: ${{ env.FILE_NAME }}
           asset_content_type: application/zip
   maven-upload:
     name: Upload to Bintray Maven Repo
@@ -93,7 +93,7 @@ jobs:
     name: Delete Release on Build Failure
     runs-on: ubuntu-latest
     needs: maven-upload
-    if: failure()
+    if: ${{ failure() || cancelled() }}
     steps:
       - name: Delete Tag and Release
         uses: dev-drprasad/delete-tag-and-release@v0.1.2
