@@ -10,7 +10,7 @@ defaults:
 jobs:
   create-release:
     name: Create Release with Installers
-    runs-on: ubuntu-latest
+      runs-on: ubuntu-latest
     outputs:
       url: ${{ steps.create_release.outputs.upload_url }}
     steps:
@@ -87,7 +87,7 @@ jobs:
       - name: Build Project with Gradle
         run: |
           chmod +w ./gradlew
-      - name: Build Installer
+      - name: Upload to Bintray
         env:
           BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
           BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}

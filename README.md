@@ -17,7 +17,16 @@ Before diving into the rest of the documentation, you might want to check out a 
 
 To try out the auto-complete function, begin typing in the `TextField` below and watch as the control automatically populates a list of suggestions for you. If you hit 'TAB' the `Person` object will be selected, and you'll be able to see the app dynamically update the complete information about that particular person. Note that you can continue to select other person objects at will and the app will continue to update the display.
 
-To install the demo, please click on the [releases](https://github.com/redbrickhut/FXTextFieldAC/releases) page and download the appropriate version for your platform under the "Assets" heading. Or, if you want the 'bleeding-edge' version you can clone the repository to your machine ([see below](#how-to-install)) and then run the following command from root of the project directory:
+To install the demo, please click on the [releases](https://github.com/redbrickhut/FXTextFieldAC/releases) page and download the appropriate version for your platform under the "Assets" heading. The appropriate file types for each version are: 
+
+* **Windows:** .msi file
+* **Mac OS:** .dmg file
+* **Ubuntu/Debian:** .deb file
+
+
+Or, if you want the 'bleeding-edge' version you can clone the repository to your machine ([see below](#how-to-install)) and then run the following command from root of the project directory:
+
+
 
 **Windows Command Prompt**
 ```
@@ -26,8 +35,12 @@ gradlew.bat run
 
 **Linux/Mac**
 ```
+chmod +w gradlew
 ./gradlew run
 ```
+
+Note that you'll need Java 14 installed on your system in order to do this.
+
 ## How to Install
 
 To use the AutoComplete TextField control, you will need to use either a Maven or Gradle build. 
@@ -51,6 +64,7 @@ dependencies {
 ```
 > You can implement any version according to the [releases page](https://github.com/redbrickhut/actf/releases/). For version 1.0 for example use the string 'com.redbrickhut:actf:1.0'
 
+I would recommend using Java 11+ when using this control. I haven't tested it with earlier versions.
 
 ### Installing with Maven
 
