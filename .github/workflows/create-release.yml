@@ -6,9 +6,28 @@ defaults:
     shell: bash
 
 jobs:
+  create-release:
+    name: Create Release with Installers
+    runs-on: ubuntu-latest
+    outputs:
+      url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
   create-installers:
     name: Create Platform Targeted Executors
+    needs: create-release
     runs-on: ${{ matrix.os }}
+    env:
+      BUILD_PATH: actf-demo/build/jpackage/
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
@@ -36,58 +55,27 @@ jobs:
           chmod +w ./${{ matrix.wrapper }}
           ./${{ matrix.wrapper }} build
       - name: Install Wix Tools
-        if: matrix.os == 'windows.latest'
+        if: ${{ matrix.os }} == 'windows.latest'
         run: |
           choco install wixtoolset -y
       - name: Build Installer
+        id: build-installer
         run: |
           ./${{ matrix.wrapper }} jpackage
+          echo ::set-output name=FILE_NAME::$(find $BUILD_PATH -maxdepth 1 -name ${{ os.file }} -exec basename {} \;)
       - name: Upload Installer
-        uses: actions/upload-artifact@v2
-        with:
-          path: actf-demo/build/jpackage/${{ matrix.file }}
-  create-release:
-    name: Create Release with Installers
-    runs-on: ubuntu-latest
-    needs: create-installers
-    outputs:
-      url: ${{ steps.create_release.outputs.upload_url }}
-    steps:
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-  upload-installers:
-    name: Upload Instrallers
-    needs: create-release
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        filename: [windows-installer, ubuntu-deb-file]
-    steps:
-      - name: Download uploaded artifact
-        uses: actions/download-artifact@v2
-      - name: Zip artifact
-        run : |
-          zip -r ${{ matrix.filename }}.zip ${{ matrix.filename }}/*
-      - name: Upload to Release
+        id: upload-installer
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-release.outputs.url }}
-          asset_path: ./${{ matrix.filename }}.zip
-          asset_name: ${{ matrix.filename }}.zip
+          asset_path: ${{ env.BUILD_PATH }}${{ steps.build-installer.outputs.FILE_NAME }}
+          asset_name: ${{ steps.build-installer.outputs.FILE_NAME }}
           asset_content_type: application/zip
   maven-upload:
     name: Upload to Bintray Maven Repo
-    needs: upload-installers
+    needs: create-installers
     runs-on: ubuntu latest
     steps:
       - name: Checkout Code
@@ -108,7 +96,7 @@ jobs:
   delete-failed-release:
     name: Delete Release on Build Failure
     runs-on: ubuntu-latest
-    needs: upload-installers
+    needs: maven-upload
     if: failure()
     steps:
       - name: Delete Tag and Release
