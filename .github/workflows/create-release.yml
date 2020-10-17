@@ -1,5 +1,7 @@
 on:
   push:
+    branch:
+      - master
     tags:
       - "v*"
 
@@ -10,7 +12,7 @@ defaults:
 jobs:
   create-release:
     name: Create Release with Installers
-      runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     outputs:
       url: ${{ steps.create_release.outputs.upload_url }}
     steps:
